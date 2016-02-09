@@ -4,6 +4,52 @@ double random(double a, double b) {
     return (b-a) * (double)rand()/(double)RAND_MAX + a;
 }
 
+
+struct Screen getScreen(int argc, char** argv)
+{
+    struct Screen s;
+    s.height = 800;
+    s.width = 1200;
+    s.iterations = 255;
+    s.centerx = -0.5;
+    s.centery = 0.0;
+    s.zoom = 1.0;
+    
+
+    switch (argc) {
+        case 7:
+            s.centery = atof(argv[6]);
+            s.centerx = atof(argv[5]);
+        case 5:
+            s.zoom = atof(argv[4]);
+        case 4: 
+            s.iterations = atoi(argv[3]);
+        case 3: 
+            s.width = atoi(argv[2]);
+            s.height = atoi(argv[1]);
+        case 1:
+            break;
+        default:
+            printf("%s [height] [width] [iterations] [zoom] [centerx] [centery]\n", argv[0]);
+            exit(1);
+    }
+    
+    s.aspect = (double)s.height / (double)s.width;
+    s.minx = s.centerx - (1.5 / s.zoom);
+    s.maxx = s.centerx + (1.5 / s.zoom);
+    s.rangex = s.maxx - s.minx;
+    
+    s.rangey = s.rangex * s.aspect;
+    s.miny = s.centery - 0.5 * s.rangey;
+    s.maxy = s.centery + 0.5 * s.rangey;
+    
+    s.screensize = s.height * s.width;
+    s.dx = (s.maxx - s.minx) / s.width;
+    s.dy = (s.maxy - s.miny) / s.height;
+    return s;
+}
+
+
 void writePPM(const char *filename, const int *array, int width, int height, int max)
 {
     int i, j;

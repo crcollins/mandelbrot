@@ -15,6 +15,11 @@ struct Screen {
     double maxx;
     double miny;
     double maxy;
+    double centerx;
+    double centery;
+    double zoom;
+    int iterations;
+    double aspect;
     int screensize;
     double rangex;
     double rangey;
@@ -22,7 +27,7 @@ struct Screen {
     double dy;
 };
 
-
+struct Screen getScreen(int argc, char** argv);
 double random(double a, double b);
 void writePPM(const char *filename, const int *array, int width, int height, int max);
 

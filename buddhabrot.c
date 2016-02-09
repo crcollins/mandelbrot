@@ -15,22 +15,11 @@ int main(int argc, char** argv)
     double cr, ci, crnew, cinew;
     
     struct Screen s;
-    s.height = 800;
-    s.width = 1200;
-    double zoom = 1.0;
-    s.minx = -2.0/zoom;
-    s.maxx = 1.0/zoom;
-    s.miny = -1.0/zoom;
-    s.maxy = 1.0/zoom;
-    s.screensize = s.height * s.width;
-    s.rangex = s.maxx - s.minx;
-    s.rangey = s.maxy - s.miny;
-    s.dx = (s.maxx - s.minx) / s.width;
-    s.dy = (s.maxy - s.miny) / s.height;
+    s = getScreen(argc, argv);
 
     int samples = 10000000;
     int sampleFreq = 10;
-    int maxIter = 255;
+    int maxIter = s.iterations;
 
     MPI_Init(NULL, NULL);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -60,7 +49,7 @@ int main(int argc, char** argv)
             crnew = random(s.minx, s.maxx);
             cinew = random(s.miny, s.maxy);
         } else {
-            mutate(cr, ci, &crnew, &cinew, zoom);
+            mutate(cr, ci, &crnew, &cinew, s.zoom);
         }
         countnew = getMandelbrotPath(zrArraynew, ziArraynew, crnew, cinew, maxIter);
         if (countnew == -1 || countnew == maxIter) continue;
