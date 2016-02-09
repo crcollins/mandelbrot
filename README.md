@@ -1,0 +1,1 @@
+Various Mandelbrot renderer implementations
