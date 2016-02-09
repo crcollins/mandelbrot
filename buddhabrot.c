@@ -90,7 +90,6 @@ int main(int argc, char** argv)
                 max = global_hist[i];
             }
         }
-        printf("max: %d %d %d", max, hist[10], global_hist[10]);
         writePPM("buddhabrot.ppm", global_hist, s.width, s.height, max);
     }
 
