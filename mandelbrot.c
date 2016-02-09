@@ -5,30 +5,31 @@
 
 int main(int argc, char** argv)
 {
+
+    
     int i, j;
-    int height = 800;
-    int width = 1200;
-    double dx = 3./width;
-    double dy = 2./height;
+
+    struct Screen s;
+    s = getScreen(argc, argv);
     double cr, ci;
     FILE *f;
-    int *image = (int *)malloc(height * width * sizeof(int));
+    int *image = (int *)malloc(s.screensize * sizeof(int));
 
-    for (i=0; i < height; i++) {
-        for (j=0; j < width; j++) {
-            cr = j * dx - 2;
-            ci = i * dy - 1;
-            image[i*width + j] = insideMandelbrot(cr, ci, 255);
+    for (i=0; i < s.height; i++) {
+        for (j=0; j < s.width; j++) {
+            cr = j * s.dx - 2;
+            ci = i * s.dy - 1;
+            image[i*s.width + j] = insideMandelbrot(cr, ci, s.iterations);
         }
     }
-     
+    
     f = fopen("mandelbrot.ppm", "w");
     fprintf(f, "P2\n");
-    fprintf(f, "%d %d\n", width, height);
+    fprintf(f, "%d %d\n", s.width, s.height);
     fprintf(f, "255\n");
-    for (i=0; i < height; i++) {
-        for (j=0; j < width; j++) {
-            fprintf(f, "%d ", image[i*width + j]);
+    for (i=0; i < s.height; i++) {
+        for (j=0; j < s.width; j++) {
+            fprintf(f, "%d ", (int)(255*((double)image[i*s.width + j] / s.iterations)));
         }
         fprintf(f, "\n");
     }
